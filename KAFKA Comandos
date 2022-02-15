@@ -1,0 +1,31 @@
+KAFKA Comandos
+
+comandos:
+
+Iniciar zookeeper:
+/kafka_2.13-3.1.0/bin$ ./zookeeper-server-start.sh ../config/zookeeper.properties
+
+Iniciar brooker:
+/kafka_2.13-3.1.0/bin$ ./kafka-server-start.sh ../config/server.properties
+
+Criar tópico:
+/kafka_2.13-3.1.0/bin$ ./kafka-topics.sh --create --topic test-topic --replication-factor 1 --partitions 4 --bootstrap-server localhost:9092
+
+
+Criar producer:
+/kafka_2.13-3.1.0/bin$ ./kafka-console-producer.sh --broker-list localhost:9092 --topic test-topic
+
+
+Criar consumer:
+/kafka_2.13-3.1.0/bin$ ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic --from-beginning
+
+
+
+Listar tópicos criados:
+/kafka_2.13-3.1.0/bin$ ./kafka-topics.sh --bootstrap-server=localhost:9092 --list
+
+Deletar tópico:
+/kafka_2.13-3.1.0/bin$ ./kafka-topics.sh --bootstrap-server=localhost:9092 --delete --topic library-events
+
+
+
