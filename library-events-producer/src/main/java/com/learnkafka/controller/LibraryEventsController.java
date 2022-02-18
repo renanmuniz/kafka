@@ -27,9 +27,17 @@ public class LibraryEventsController {
             throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
 
         log.info("# before sendLibraryEvent");
-        //libraryEventProducer.sendLibraryEvent(libraryEvent); método assíncrono!
-        SendResult<Integer,String> sendResult = libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
-        log.info("SendResult is {} ", sendResult.toString());
+
+        //metodo assincrono:
+        //SendResult<Integer,String> sendResult = libraryEventProducer.sendLibraryEvent(libraryEvent);
+
+        //metodo sincrono:
+        //SendResult<Integer,String> sendResult = libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
+        //log.info("SendResult is {} ", sendResult.toString());
+
+        //metodo assincrono utilizando kafkaTemplate.send ao inves de kafkaTemplate.sendDefault
+        libraryEventProducer.sendLibraryEvent_Approach2(libraryEvent);
+
         log.info("# after sendLibraryEvent");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
