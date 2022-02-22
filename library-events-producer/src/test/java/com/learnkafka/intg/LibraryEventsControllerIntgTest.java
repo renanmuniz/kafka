@@ -91,4 +91,41 @@ public class LibraryEventsControllerIntgTest {
 
     }
 
+    @Test
+    @Timeout(5) //espera 5 segundos para executar o assert do teste. Caso a thread nao retorne a tempo,
+        //exception: java.util.concurrent.TimeoutException
+        //utilizado em casos onde o processamento e' assincrono(paralelo) e precisa aguardar retorno da thread.
+    void putLibraryEvent() throws InterruptedException {
+
+        Book book = Book.builder()
+                .bookId(123)
+                .bookAuthor("Renan")
+                .bookName("Teste - Kafka using SpringBoot")
+                .build();
+
+        LibraryEvent libraryEvent = LibraryEvent.builder()
+                .libraryEventId(123)
+                .book(book)
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("content-type", MediaType.APPLICATION_JSON.toString());
+        HttpEntity<LibraryEvent> request = new HttpEntity<>(libraryEvent, headers);
+
+        ResponseEntity<LibraryEvent> response =
+                restTemplate.exchange("/v1/libraryevent", HttpMethod.PUT, request, LibraryEvent.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ConsumerRecord<Integer, String> consumerRecord =
+                KafkaTestUtils.getSingleRecord(consumer, "library-events");
+
+        String expectedRecord =
+                "{\"libraryEventId\":123,\"libraryEventType\":\"UPDATE\",\"book\":{\"bookId\":123,\"bookName\":\"Teste - Kafka using SpringBoot\",\"bookAuthor\":\"Renan\"}}";
+        String value = consumerRecord.value();
+
+        assertEquals(expectedRecord, value);
+
+    }
+
 }
