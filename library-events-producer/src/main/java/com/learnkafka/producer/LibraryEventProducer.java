@@ -58,17 +58,17 @@ public class LibraryEventProducer {
         String value = objectMapper.writeValueAsString(libraryEvent);
         SendResult<Integer,String> sendResult = null;
 
-        try {
-            sendResult = kafkaTemplate.sendDefault(key, value).get(1, TimeUnit.SECONDS);
-        } catch (ExecutionException | InterruptedException e) {
-            log.error("ExecutionException/InterruptedException Error sending the message for the key : {} and the value is {}, ERROR: {}",
-                    key, value, e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Exception Error sending the message for the key : {} and the value is {}, ERROR: {}",
-                    key, value, e.getMessage());
-            throw e;
-        }
+            try {
+                sendResult = kafkaTemplate.sendDefault(key, value).get(1, TimeUnit.SECONDS);
+            } catch (ExecutionException | InterruptedException e) {
+                log.error("ExecutionException/InterruptedException Error sending the message for the key : {} and the value is {}, ERROR: {}",
+                        key, value, e.getMessage());
+                throw e;
+            } catch (Exception e) {
+                log.error("Exception Error sending the message for the key : {} and the value is {}, ERROR: {}",
+                        key, value, e.getMessage());
+                throw e;
+            }
 
         return sendResult;
 
